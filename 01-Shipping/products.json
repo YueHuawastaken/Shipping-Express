@@ -1,0 +1,22 @@
+[
+    {
+        "_id":1,
+        "name":"Naruto Resin Statue",
+        "value" : 600,
+        "Product_Type": 4
+      
+    },
+    {
+        "_id":2,
+        "name":"Sasuke Resin Statue",
+        "value" : 550,
+        "Product_Type": 5
+    },
+    {
+        "_id":3,
+        "name":"Sakura Resin Statue",
+        "value" : 300,
+        "Product_Type": 4
+    }
+    
+]

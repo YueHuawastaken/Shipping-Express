@@ -43,12 +43,15 @@ async function main() {
 
 main();
  
-app.post('/shippingproducts', async (req, res) => {
+app.post('/shippingproducts', async(req,res) => {
   try {
 
+      console.log("route hit")
       const db = await connectToMongoDB();
 
-    const {name, value, product_type} = req.body;
+      // look at ur req.body and each destructured variable
+
+      const {name, value, product_type} = req.body;
       console.log("Items here", req.body);
     
     // Validation
@@ -56,7 +59,8 @@ app.post('/shippingproducts', async (req, res) => {
       return res.status(400).json({ message: 'Missing required fields' });
     }
 
-    const newProduct = {name, value, product_type };
+    // next line console log
+    const newProduct = {name, value, product_type};
     const result = await db.collection('shipping_db').insertOne(newProduct);
     res.status(201).json(result);
   } catch (error) {
@@ -107,7 +111,7 @@ app.get('/shippingproducts', async (req, res) => {
     console.log("modified array here 2", modifiedArrayOfItems)
     let jsonString = JSON.stringify(modifiedArrayOfItems);
     res.json(jsonString)
-
+  
   //     if (allShippingItems && tags) {
 
   //       let responseOutput = {
@@ -126,23 +130,23 @@ app.get('/shippingproducts', async (req, res) => {
   // }); 
     
 
-    if (allShippingItems && tags) {
+    // if (allShippingItems && tags) {
 
-      let responseOutput = {
-        _id: searchProduct._id,
-        name: searchProduct.name,
-        value: searchProduct.value,
-        product_type: tags.type
-      }
-      res.json(responseOutput);
-    } else {
-      res.status(404).json({ message: 'Product not found' });
-    }
+    //   let responseOutput = {
+    //     _id: searchProduct._id,
+    //     name: searchProduct.name,
+    //     value: searchProduct.value,
+    //     product_type: tags.type
+    //   }
+    //   res.json(responseOutput);
+    // } else {
+    //   res.status(404).json({ message: 'Product not found' });
+    // }
   } catch (error) {
     res.status(500).json({ message: 'Error fetching product', error: error.message });
   }
 });
-  
+
 // Get a single recipe by ID
 app.get('/shippingproducts/:id', async (req, res) => {
   try {
@@ -172,19 +176,20 @@ app.get('/shippingproducts/:id', async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Error fetching product', error: error.message });
   }
+})
 
-  app.get('/shippingproducts', async (req, res) => {
-    try {
+app.get('/shippingproducts', async (req, res) => {
+  try {
       // Fetching all recipes
       const allShippingItems = await db.collection('shipping_db').find({}).toArray();
   const tags = await db.collection('product_Type').find({}).toArray();
-    const tagMap = {};
+  const tagMap = {};
 
     // Creating tag map using for loop
-    for (let i = 0; i < tags.length; i++) {
-      const tag = tags[i];
-      tagMap[tag._id] = tag.name;
-    }
+  for (let i = 0; i < tags.length; i++) {
+    const tag = tags[i];
+    tagMap[tag._id] = tag.name;
+  }
 
     // Replacing tag IDs with tag names in recipes using for loops
     for (let shipping_db of shippingproducts) {
@@ -206,4 +211,4 @@ app.get('/shippingproducts/:id', async (req, res) => {
     res.status(500).json({ message: 'Error fetching recipes', error: error.message });
   }
 });
-});
+

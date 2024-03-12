@@ -1,11 +1,11 @@
 [
     {
         "_id" : 4,
-        "Type" : "Sensitive"
+        "type" : "Sensitive"
         
     },
     {
         "_id" : 5,
-        "Type" : "Normal"
+        "type" : "Normal"
     }
 ]

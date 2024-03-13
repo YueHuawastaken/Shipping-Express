@@ -181,9 +181,9 @@ app.get('/shippingproducts/:id', async (req, res) => {
 app.get('/shippingproducts', async (req, res) => {
   try {
       // Fetching all recipes
-      const allShippingItems = await db.collection('shipping_db').find({}).toArray();
-  const tags = await db.collection('product_Type').find({}).toArray();
-  const tagMap = {};
+    const allShippingItems = await db.collection('shipping_db').find({}).toArray();
+const tags = await db.collection('product_Type').find({}).toArray();
+const tagMap = {};
 
     // Creating tag map using for loop
   for (let i = 0; i < tags.length; i++) {
@@ -211,4 +211,45 @@ app.get('/shippingproducts', async (req, res) => {
     res.status(500).json({ message: 'Error fetching recipes', error: error.message });
   }
 });
+
+app.put('/shippingproducts/:id', async (req, res) => {
+  try {
+    const id = new ObjectId(req.params.id);
+    const {name, value, product_type} = req.body;
+
+    // Validation
+    if (!name || !value || !product_type === 0) {
+      return res.status(400).json({ message: 'Name and Value are required, and Value should be a non-empty array.' });
+    }
+
+    // Additional validation can be added as necessary
+
+    const updateData = {name, value, product_type};
+    const result = await db.collection('shipping_db').updateOne(
+      {_id: id},
+      {$set: updateData}
+    );
+
+    if (result.modifiedCount === 0) {
+      return res.status(404).json({ message: 'No product found with this ID, or no new data provided' });
+    }
+
+    res.json({message: 'Product updated successfully'});
+  } catch (error) {
+    res.status(500).json({message: 'Error updating product', error: error.message});
+  }
+});
+
+app.delete('/shippingproducts/:id', async function(req,res){
+  await db.collection('shipping_db').deleteOne({
+      '_id': new ObjectId(req.params.id)
+  });
+
+  res.json({
+      'message':"Deleted"
+  })
+})
+
+
+
 
